@@ -134,7 +134,8 @@ img { image-rendering: auto; }
   display: flex; gap: 8px; flex-wrap: wrap; justify-content: center;
   background: rgba(255, 253, 246, 0.94); border: 2px solid #eeddb2;
   border-radius: 18px; padding: 8px 12px; box-shadow: var(--shadow);
-  max-width: 96vw;
+  /* left: 50% would cap the shrink-to-fit width at half the screen */
+  width: max-content; max-width: 96vw;
 }
 
 .hud-btn {
