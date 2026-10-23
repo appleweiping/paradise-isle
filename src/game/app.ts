@@ -334,15 +334,42 @@ export class App {
     let downY = 0;
     let dragging = false;
     let panning = false;
+    // two-finger pinch zoom on touch screens (the mouse wheel does this on desktop)
+    const pointers = new Map<number, { x: number; y: number }>();
+    let pinchDist = 0;
+    let pinching = false;
+    const spread = (): { d: number; mx: number; my: number } => {
+      const [a, b] = [...pointers.values()];
+      return { d: Math.hypot(a.x - b.x, a.y - b.y), mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+    };
 
     canvas.addEventListener('pointerdown', (ev) => {
+      pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (pointers.size === 2) {
+        pinching = true;
+        pinchDist = spread().d;
+        return;
+      }
       downX = ev.clientX;
       downY = ev.clientY;
       dragging = true;
       panning = false;
     });
+    const dropPointer = (ev: PointerEvent): void => {
+      pointers.delete(ev.pointerId);
+    };
+    window.addEventListener('pointercancel', dropPointer);
     canvas.addEventListener('pointermove', (ev) => {
       const cam = this.renderer.camera;
+      if (pointers.has(ev.pointerId)) pointers.set(ev.pointerId, { x: ev.clientX, y: ev.clientY });
+      if (pinching) {
+        if (pointers.size === 2) {
+          const { d, mx, my } = spread();
+          if (pinchDist > 0 && d > 0) cam.zoomAt(d / pinchDist, mx, my);
+          pinchDist = d;
+        }
+        return;
+      }
       if (dragging) {
         const dx = ev.clientX - downX;
         const dy = ev.clientY - downY;
@@ -355,14 +382,22 @@ export class App {
       this.hover = tile;
     });
     canvas.addEventListener('pointerup', (ev) => {
+      dropPointer(ev);
       dragging = false;
+      if (pinching) {
+        // a pinch never counts as a tap; wait until every finger is up
+        if (pointers.size === 0) pinching = false;
+        panning = false;
+        return;
+      }
       if (panning) {
         panning = false;
         return;
       }
       this.onClick(ev.clientX, ev.clientY);
     });
-    canvas.addEventListener('pointerleave', () => {
+    canvas.addEventListener('pointerleave', (ev) => {
+      if (ev.pointerType === 'mouse') dropPointer(ev);
       dragging = false;
       this.hover = null;
     });
