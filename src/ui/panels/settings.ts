@@ -104,8 +104,7 @@ function render(body: HTMLElement, ctx: SettingsCtx): void {
   ));
 
   body.append(h('div', { class: 'set-about' },
-    h('div', {}, '天堂小岛 Paradise Isle v1.0'),
-    h('div', {}, 'An original open-source homage to the 2011 web game QQ天堂岛.'),
-    h('div', {}, 'No Tencent assets · All art drawn procedurally at runtime · MIT License'),
+    h('div', {}, `${t('start.title')} v1.0`),
+    h('div', {}, t('set.aboutArt')),
   ));
 }

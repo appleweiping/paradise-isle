@@ -33,6 +33,10 @@ export const ZH: Record<string, string> = {
   'start.delete': '删除',
   'start.deleteConfirm': '确定删除这个存档吗？此操作不可恢复！',
   'start.tagline': '种田 · 钓鱼 · 斗兽 · 装扮 · 串门',
+  'start.langSwitch': 'EN',
+  'start.langSwitchTitle': 'Switch to English',
+  'start.footer': '开源项目 · ',
+  'set.aboutArt': '全部美术都在运行时用代码绘制 · MIT 许可',
 
   // ---- HUD 与底栏
   'hud.bag': '背包',

@@ -6,10 +6,28 @@ import type { L10n, Lang } from '../core/types';
 import { ZH } from './zh';
 import { EN } from './en';
 
-let currentLang: Lang = 'zh';
+const LANG_KEY = 'paradise-isle.lang';
 
+/** First visit: follow the browser (Chinese if it is set to Chinese, otherwise English). */
+function initialLang(): Lang {
+  try {
+    const saved = globalThis.localStorage?.getItem(LANG_KEY);
+    if (saved === 'zh' || saved === 'en') return saved;
+  } catch { /* storage blocked */ }
+  const nav = globalThis.navigator?.language ?? 'en';
+  return nav.toLowerCase().startsWith('zh') ? 'zh' : 'en';
+}
+
+let currentLang: Lang = initialLang();
+
+/** Switch the UI language and remember the choice for the next visit. */
 export function setLang(lang: Lang): void {
   currentLang = lang;
+  try { globalThis.localStorage?.setItem(LANG_KEY, lang); } catch { /* storage blocked */ }
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
+    document.title = lang === 'zh' ? '天堂小岛 Paradise Isle' : 'Paradise Isle';
+  }
 }
 
 export function getLang(): Lang {

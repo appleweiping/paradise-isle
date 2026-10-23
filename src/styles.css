@@ -48,8 +48,9 @@ img { image-rendering: auto; }
 .title-box {
   background: var(--paper); border-radius: 22px; box-shadow: var(--shadow);
   padding: 36px 44px; text-align: center; max-width: 460px; width: 92%;
-  border: 3px solid #f4e3bd;
+  border: 3px solid #f4e3bd; position: relative;
 }
+.title-lang { position: absolute; top: 12px; right: 12px; min-width: 52px; }
 
 .title-logo {
   font-size: 44px; letter-spacing: 6px; color: var(--coral);
@@ -451,4 +452,6 @@ img { image-rendering: auto; }
   .quest-hint { max-width: 68vw; font-size: 12px; }
   .wd-layout { flex-direction: column; }
   .wd-preview { flex: none; }
+  .title-box { padding: 40px 20px 26px; }
+  .title-logo { font-size: 34px; letter-spacing: 3px; }
 }

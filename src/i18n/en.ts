@@ -31,6 +31,10 @@ export const EN: Record<string, string> = {
   'start.delete': 'Delete',
   'start.deleteConfirm': 'Delete this save? This cannot be undone!',
   'start.tagline': 'Farm · Fish · Fight · Fashion · Friends',
+  'start.langSwitch': '中文',
+  'start.langSwitchTitle': '切换到中文',
+  'start.footer': 'Open source · ',
+  'set.aboutArt': 'All art is drawn in code at runtime · MIT License',
 
   'hud.bag': 'Bag',
   'hud.shop': 'Shop',

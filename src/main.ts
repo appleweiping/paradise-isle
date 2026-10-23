@@ -6,7 +6,7 @@ import type { GameState } from './core/types';
 import { settleOffline, type OfflineSummary } from './core/offline';
 import { itemDef } from './core/registry';
 import { deleteSlot, loadFromSlot, newGameInSlot, slotInfos } from './save/save';
-import { setLang, fmtDuration, t, tl } from './i18n';
+import { setLang, getLang, fmtDuration, t, tl } from './i18n';
 import { h, clearChildren } from './ui/dom';
 import { initToast } from './ui/toast';
 import { initModal, confirmDialog, infoDialog, promptDialog } from './ui/modal';
@@ -39,7 +39,8 @@ function showOfflineSummary(state: GameState, summary: OfflineSummary): void {
 }
 
 function startGame(state: GameState, slot: number, offline: OfflineSummary | null): void {
-  setLang(state.settings.lang);
+  // the language is a per-browser choice; saves just follow it
+  state.settings.lang = getLang();
   const title = document.getElementById('title-screen');
   title?.classList.add('hidden');
   canvasEl().classList.remove('hidden');
@@ -106,12 +107,21 @@ function renderTitle(root: HTMLElement): void {
 
   root.append(
     h('div', { class: 'title-box' },
+      h('button', {
+        class: 'btn btn-sm title-lang',
+        title: t('start.langSwitchTitle'),
+        onclick: () => {
+          sfx('click');
+          setLang(getLang() === 'zh' ? 'en' : 'zh');
+          renderTitle(root);
+        },
+      }, t('start.langSwitch')),
       h('h1', { class: 'title-logo' }, t('start.title')),
       h('div', { class: 'title-sub' }, t('start.subtitle')),
       h('div', { class: 'title-tagline' }, t('start.tagline')),
       slotList,
       h('div', { class: 'title-footer' },
-        'An original open-source homage · ',
+        t('start.footer'),
         h('a', { href: 'https://github.com/appleweiping/paradise-isle', target: '_blank', rel: 'noreferrer' }, 'GitHub'),
       ),
     ),
@@ -122,12 +132,7 @@ function boot(): void {
   initToast();
   initModal();
   initActionMenu();
-  // 语言初始化：跟随上次存档设置
-  const active = slotInfos().find((s) => s !== null);
-  if (active) {
-    const state = loadFromSlot(active.slot, Date.now());
-    if (state) setLang(state.settings.lang);
-  }
+  setLang(getLang()); // sync <html lang> and the page title
   showTitle();
 }
 
