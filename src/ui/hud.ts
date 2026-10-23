@@ -85,6 +85,12 @@ export class Hud {
 
     this.root = h('div', { class: 'hud-root' }, topBar, bottomBar, this.questHint, this.visitBanner);
     document.body.append(this.root);
+    // On narrow screens the top bar wraps onto two rows; keep the quest hint below it.
+    if (typeof ResizeObserver !== 'undefined') {
+      new ResizeObserver(() => {
+        this.root.style.setProperty('--hud-top-bottom', `${Math.round(topBar.getBoundingClientRect().bottom)}px`);
+      }).observe(topBar);
+    }
   }
 
   private mkBtn(icon: string, label: string, onClick: () => void): HTMLButtonElement {

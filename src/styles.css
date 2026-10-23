@@ -148,7 +148,7 @@ img { image-rendering: auto; }
 .hud-btn.active { border-color: var(--leaf); background: #eef7e4; }
 
 .quest-hint {
-  position: absolute; top: 86px; left: 10px; max-width: 380px;
+  position: absolute; top: calc(var(--hud-top-bottom, 76px) + 10px); left: 10px; max-width: 380px;
   background: rgba(255, 249, 224, 0.95); border: 2px solid var(--gold);
   border-radius: 12px; padding: 8px 14px; font-size: 13px; cursor: pointer;
   box-shadow: var(--shadow);
@@ -156,7 +156,7 @@ img { image-rendering: auto; }
 .quest-hint.done { border-color: var(--leaf); background: rgba(238, 247, 228, 0.96); }
 
 .visit-banner {
-  position: absolute; top: 86px; right: 10px;
+  position: absolute; top: calc(var(--hud-top-bottom, 76px) + 10px); right: 10px;
   background: rgba(90, 167, 224, 0.94); color: #fff; font-weight: 700;
   border-radius: 12px; padding: 8px 16px; font-size: 13.5px; box-shadow: var(--shadow);
 }
