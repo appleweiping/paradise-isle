@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "天堂小岛 Paradise Isle — an original open-source island life-sim inspired by the 2011 web game QQ天堂岛. No Tencent assets; all art is procedurally drawn.",
+  "description": "An island life-sim for the browser: farm, raise animals, fish, fight off wild beasts, dress up and visit neighbours.",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
