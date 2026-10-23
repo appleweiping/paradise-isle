@@ -63,6 +63,7 @@ export function applyEvents(state: GameState, events: readonly GameEvent[], now:
     // 推进进行中的任务
     for (const qp of state.quests.active) {
       const def = questDef(qp.defId);
+      const wasComplete = questComplete(qp);
       def.steps.forEach((step, i) => {
         if (step.type === 'reachLevel') {
           if (ev.type === 'reachLevel') qp.counts[i] = Math.max(qp.counts[i], ev.amount ?? 0);
@@ -72,7 +73,8 @@ export function applyEvents(state: GameState, events: readonly GameEvent[], now:
           qp.counts[i] += ev.amount ?? 1;
         }
       });
-      if (questComplete(qp)) {
+      // announce only the moment a quest becomes claimable, not on every later event
+      if (!wasComplete && questComplete(qp)) {
         derived.push({ type: 'toast', target: 'msg.questReady', data: qp.defId });
       }
     }

@@ -34,6 +34,19 @@ describe('任务链', () => {
     expect(state.quests.active.some((q) => q.defId === 'q_water')).toBe(true);
   });
 
+  it('only announces a quest as ready once', () => {
+    const state = makeGame();
+    const ready: string[] = [];
+    for (const plot of state.plots) {
+      const r = plant(state, plot.uid, 'crop_carrot', NOW);
+      expect(r.ok).toBe(true);
+      for (const ev of applyEvents(state, r.events!, NOW)) {
+        if (ev.target === 'msg.questReady') ready.push(String(ev.data));
+      }
+    }
+    expect(ready.filter((id) => id === 'q_welcome')).toHaveLength(1);
+  });
+
   it('未完成不能领奖', () => {
     const state = makeGame();
     expect(claimQuest(state, 'q_welcome', NOW).ok).toBe(false);
